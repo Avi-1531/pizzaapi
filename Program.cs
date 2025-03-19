@@ -36,7 +36,7 @@ namespace DemoApi
             WebApplication app = builder.Build();
 
             if (builder.Environment.EnvironmentName.Equals("Development", StringComparison.InvariantCultureIgnoreCase)
-                || builder.Environment.EnvironmentName.Equals("QA", StringComparison.InvariantCultureIgnoreCase))
+                || builder.Environment.EnvironmentName.Equals("QA", StringComparison.InvariantCultureIgnoreCase) || builder.Environment.EnvironmentName.Equals("UAT", StringComparison.InvariantCultureIgnoreCase) || builder.Environment.EnvironmentName.Equals("Production", StringComparison.InvariantCultureIgnoreCase))
             {
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
