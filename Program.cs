@@ -18,7 +18,24 @@ namespace DemoApi
             builder.Services.AddSingleton(apiConfiguration);
             builder.Services.AddControllers().AddNewtonsoftJson();
             builder.Services.AddEndpointsApiExplorer();
+            // var builder = WebApplication.CreateBuilder(args);
+
+            // Add CORS policy
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngularApp",
+                    policy => policy.WithOrigins("http://localhost:4200")
+                                    .AllowAnyHeader()
+                                    .AllowAnyMethod()
+                                    .AllowCredentials());
+            });
+
+            // var app = builder.Build();
+
             
+
+            
+
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(apiConfiguration.ApiVersion, new OpenApiInfo { 
@@ -49,7 +66,10 @@ namespace DemoApi
             {
                 app.UseExceptionHandler("/error");
             }
+            app.UseRouting();
 
+            // Apply the CORS policy globally
+            app.UseCors("AllowAngularApp");
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();

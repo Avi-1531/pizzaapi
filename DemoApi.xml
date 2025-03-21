@@ -34,7 +34,7 @@
             <param name="id">(int) unique identifier of the pizza</param>
             <returns>(Pizza) one pizza model object if it exists, not found otherwise</returns>
         </member>
-        <member name="M:DemoApi.Controllers.PizzaController.Create(DemoApi.Models.Pizza)">
+        <member name="M:DemoApi.Controllers.PizzaController.HandleOptions">
             <summary>
             Creates a pizza and automatically assigns a unique identifier (int)
             </summary>

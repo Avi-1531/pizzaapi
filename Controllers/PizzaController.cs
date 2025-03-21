@@ -84,6 +84,16 @@ public class PizzaController : ControllerBase
     /// <returns>(Pizza) pizza that was created with the assigned unique identifier (int)</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
+    [HttpOptions]
+    [Route("api/Pizza")]
+    public IActionResult HandleOptions()
+    {
+        Response.Headers.Add("Access-Control-Allow-Origin", "http://localhost:4200");
+        Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type");
+        return Ok();
+    }
+
     public IActionResult Create(Pizza pizza)
     {
         // Create the pizza
@@ -103,10 +113,10 @@ public class PizzaController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Update(int id, Pizza pizza)
+    public IActionResult Update(int id, [FromBody] Pizza pizza)
     {
         // Validate the user input
-        if (id <= 0 || id != pizza.Id)
+        if (id < 0 || id != pizza.Id)
         {
             return BadRequest();
         }
