@@ -1,25 +1,25 @@
-# Use the official Microsoft .NET SDK image for building the application
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+#Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
+#For more information, please see https://aka.ms/containercompat
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 As base
 WORKDIR /app
+EXPOSE 8080
 
-# Copy project files and restore dependencies
-COPY *.csproj ./
-RUN dotnet restore
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY . .
 
-# Copy the rest of the application files and build it
-COPY . ./
-RUN dotnet publish -c Release -o out
+RUN dotnet restore "DemoApi.csproj"
+COPY . .
+# WORKDIR "/src/pizzaapi"
+RUN dotnet build "DemoApi.csproj" -c Release -o /app/build
 
-# Use the official Microsoft .NET Runtime image to create the runtime environment
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM build AS publish
+RUN dotnet publish "DemoApi.csproj" -c Release -o /app/publish
+
+FROM base AS final
 WORKDIR /app
-
-# Copy the published output from the build stage to the runtime stage
-COPY --from=build-env /app/out .
-
-#Expose port
-
-EXPOSE 7048
-
-# Specify the command to run the application
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "DemoApi.dll"]

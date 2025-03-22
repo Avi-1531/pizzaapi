@@ -24,7 +24,7 @@ namespace DemoApi
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAngularApp",
-                    policy => policy.WithOrigins("http://localhost:4200")
+                    policy => policy.WithOrigins("http://localhost:94")
                                     .AllowAnyHeader()
                                     .AllowAnyMethod()
                                     .AllowCredentials());
